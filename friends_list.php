@@ -7,6 +7,53 @@ $password = 'mangoshake';
 $dbh = new PDO($dsn,$user,$password);
 $dbh->query('SET NAMES utf8');
 
+$area_id = $_GET['id'];
+
+//エリア名の取得
+$sql = 'SELECT `name` FROM `area_table` WHERE `id` = '.$area_id;
+//echo $sql;
+$stmt = $dbh->prepare($sql);
+
+$stmt->execute();
+
+$area_name = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+//男性の数
+$number_of_male = 0;
+
+//女性の数
+$number_of_female = 0;
+
+
+//2.SQLで指令をだす
+$sql = 'SELECT * FROM `friends_table` WHERE `area_table_id` = '.$area_id;
+//echo $sql;
+$stmt = $dbh->prepare($sql);
+
+$stmt->execute();
+
+//配列の初期化
+$friends_array = array();
+
+while(1){
+	$rec = $stmt->fetch(PDO::FETCH_ASSOC);
+	if ($rec == false) {
+		break;
+	}
+	$friends_array[] = $rec; 
+
+	if ($rec['gender'] == '男'){
+		$number_of_male += 1;
+	}else{
+		$number_of_female += 1;
+	}
+}
+
+//3.データベースから切断する
+$dbh=null;
+
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -15,31 +62,18 @@ $dbh->query('SET NAMES utf8');
 <title>FriendsSystem</title>
 </head>
 <body>
-	お友達リスト
+	<h2><?php echo $area_name['name']; ?>お友達リスト</h2>
+	<h3>男性:<?php echo $number_of_male; ?>名、女性:<?php echo $number_of_female; ?>名</h3>
 	<?php
-		$area_id = $_GET['id'];
-		//2.SQLで指令をだす
-		$sql = 'SELECT * FROM `friends_table` WHERE `area_table_id` = '.$area_id;
-		//echo $sql;
-		$stmt = $dbh->prepare($sql);
-
-		$stmt->execute();
-
 		echo '<ul>';
-		while(1){
-			$rec = $stmt->fetch(PDO::FETCH_ASSOC);
-			if ($rec == false) {
-				break;
-			}
+		foreach ($friends_array as $friends_each) {
 			echo '<li>';
-			echo $rec['name'];
-			echo '<input type="button" value="編集" onclick="location.href=\'friends_update.php?id='.$rec['id'].'\'">';
+			echo $friends_each['name'];
+			echo '<input type="button" value="編集" onclick="location.href=\'friends_update.php?id='.$friends_each['id'].'\'">';
 			echo '</li>';
 		}
 
 		echo '</ul>';
-		//3.データベースから切断する
-		$dbh=null;
 	?>
 	<br />
 	<input type="button" value="追加" onclick="location.href='friends_add.php'">
