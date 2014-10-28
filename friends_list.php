@@ -9,6 +9,15 @@ $dbh->query('SET NAMES utf8');
 
 $area_id = $_GET['id'];
 
+//削除フラグの状態を調べて、存在する場合削除処理を行う
+if (isset($_GET['del_flag'])){
+	$del_sql = 'DELETE FROM `friends_table` WHERE `id`='.$_GET['friend_id'];
+
+	$del_stmt = $dbh->prepare($del_sql);
+	$del_stmt->execute();
+}
+
+
 //エリア名の取得
 $sql = 'SELECT `name` FROM `area_table` WHERE `id` = '.$area_id;
 //echo $sql;
@@ -60,6 +69,17 @@ $dbh=null;
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>FriendsSystem</title>
+<script type="text/javascript">
+	function fnc_delbutton(area_id,friend_id){
+			if (confirm('削除しますか？')){
+				location.href='friends_list.php?id=' + area_id + '&friend_id=' + friend_id + '&del_flag=1';
+
+				return true;
+			}
+
+			return false;
+	}
+</script>
 </head>
 <body>
 	<h2><?php echo $area_name['name']; ?>お友達リスト</h2>
@@ -70,6 +90,10 @@ $dbh=null;
 			echo '<li>';
 			echo $friends_each['name'];
 			echo '<input type="button" value="編集" onclick="location.href=\'friends_update.php?id='.$friends_each['id'].'\'">';
+
+			//echo '<input type="button" value="削除" onclick="if (confirm(\'削除しますか？\')){location.href=\'friends_list.php?id='.$area_id.'&friend_id='.$friends_each['id'].'&del_flag=1\'}">';
+			echo '<input type="button" value="削除" onclick="fnc_delbutton('.$area_id.','.$friends_each['id'].');" >';
+
 			echo '</li>';
 		}
 
