@@ -11,6 +11,11 @@ if (isset($_POST['name'])){
 	echo 'POST送信された！';
 	
 	//Insert文
+	$sql = "INSERT INTO `FriendsDB`.`friends_table` (`id`, `area_table_id`, `name`, `gender`, `age`) ";
+	$sql .= "VALUES (NULL, '".$_POST['area_table_id']."', '".$_POST['name']."', '".$_POST['gender']."', '".$_POST['age']."');";
+
+	$stmt = $dbh->prepare($sql);
+	$stmt->execute();
 
 	//処理が全て終わった後、都道府県一覧に戻る
 	header('Location: http://'.$_SERVER['HTTP_HOST'].'/friends/index.php');
@@ -37,7 +42,7 @@ if (isset($_POST['name'])){
 	<h2>お友達の追加</h2>
 	<form method="post" >
 		名前
-		<input name="name" type="text" style="width:100px;height:30px;" maxlength="20"><br />
+		<input name="name" type="text" style="width:100px;height:30px;" maxlength="20" value=<?php echo $rec['name']; ?>><br />
 		出身
 		<select name="area_table_id">
 			<?php

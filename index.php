@@ -15,6 +15,7 @@ $dbh->query('SET NAMES utf8');
 <title>FriendsSystem</title>
 </head>
 <body>
+	<?php echo $_SERVER['HTTP_USER_AGENT']; ?>
 	都道府県一覧
 	<?php
 		//2.SQLで指令をだす
