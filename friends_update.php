@@ -11,6 +11,11 @@ if (isset($_POST['name'])){
 	echo 'POST送信された！';
 	
 	//Update文
+	$sql = "UPDATE `friends_table` SET `name` = '".$_POST['name']."',`gender` = '".$_POST['gender']."',`age` = '".$_POST['age'];
+	$sql .= "' WHERE `id` = ".$_POST['id'];
+	
+	$stmt = $dbh->prepare($sql);
+	$stmt->execute();
 
 	//処理が全て終わった後、都道府県一覧に戻る
 	header('Location: http://'.$_SERVER['HTTP_HOST'].'/friends/index.php');
@@ -36,6 +41,7 @@ if (isset($_POST['name'])){
 
 		$rec_friends = $stmt_friends->fetch(PDO::FETCH_ASSOC);
 
+		$id = $rec_friends['id'];
 		$area_table_id = $rec_friends['area_table_id'];
 		$name = $rec_friends['name'];
 		$gender = $rec_friends['gender'];
@@ -86,7 +92,7 @@ if (isset($_POST['name'])){
 		</select><br />
 		年齢
 		<input name="age" type="text" style="width:100px;height:30px;" maxlength="10" value="<?php echo $age; ?>"><br />
-
+		<input name="id" type="hidden" value="<?php echo $id; ?>">
 		<br />		
 		<input type="submit" value="保存" >
 	</form>

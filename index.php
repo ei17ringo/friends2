@@ -15,17 +15,25 @@ $dbh->query('SET NAMES utf8');
 <title>FriendsSystem</title>
 </head>
 <body>
-	<?php echo $_SERVER['HTTP_USER_AGENT']; ?>
+	<?php //echo $_SERVER['HTTP_USER_AGENT']; ?>
 	都道府県一覧
 	<?php
 		//2.SQLで指令をだす
-		$sql = 'SELECT * FROM `area_table`';
+		//$sql = 'SELECT * FROM `area_table`';
+		
+
+		$sql ='SELECT area_table.*,count(friends_table.id) AS `friends_cnt` ';
+		$sql .='FROM area_table LEFT OUTER JOIN friends_table ';
+		$sql .= 'ON area_table.id = friends_table.area_table_id ';
+		$sql .= 'GROUP BY area_table.id';
+
+
 		//echo $sql;
 		$stmt = $dbh->prepare($sql);
 
 		$stmt->execute();
 
-		echo '<table>';
+		echo '<table style="border:1px;">';
 		while(1){
 			$rec = $stmt->fetch(PDO::FETCH_ASSOC);
 			if ($rec == false) {
@@ -34,6 +42,7 @@ $dbh->query('SET NAMES utf8');
 			echo '<tr>';
 			echo '<td>'.$rec['id'].'</td>';
 			echo '<td><a href="friends_list.php?id='.$rec['id'].'">'.$rec['name'].'</a></td>';
+			echo '<td>'.$rec['friends_cnt'].'</td>';
 			echo '</tr>';
 		}
 
