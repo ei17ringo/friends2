@@ -1,6 +1,6 @@
 <?php
 
-//1.データベースに接続する
+//1.データベースに接続する test
 $dsn = 'mysql:dbname=FriendsDB;host=localhost';
 $user = 'root';
 $password = 'mangoshake';
