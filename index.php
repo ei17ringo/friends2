@@ -19,7 +19,6 @@ $dbh->query('SET NAMES utf8');
 	都道府県一覧
 	<?php
 		//2.SQLで指令をだす
-		//$sql = 'SELECT * FROM `area_table`';
 		
 
 		$sql ='SELECT area_table.*,count(friends_table.id) AS `friends_cnt` ';
