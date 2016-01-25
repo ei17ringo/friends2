@@ -3,7 +3,7 @@
 //1.データベースに接続する
 $dsn = 'mysql:dbname=FriendsDB;host=localhost';
 $user = 'root';
-$password = 'mangoshake';
+$password = '';
 $dbh = new PDO($dsn,$user,$password);
 $dbh->query('SET NAMES utf8');
 

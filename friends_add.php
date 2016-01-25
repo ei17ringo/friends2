@@ -3,7 +3,7 @@
 //1.データベースに接続する
 $dsn = 'mysql:dbname=FriendsDB;host=localhost';
 $user = 'root';
-$password = 'mangoshake';
+$password = '';
 $dbh = new PDO($dsn,$user,$password);
 $dbh->query('SET NAMES utf8');
 
@@ -42,7 +42,7 @@ if (isset($_POST['name'])){
 	<h2>お友達の追加</h2>
 	<form method="post" >
 		名前
-		<input name="name" type="text" style="width:100px;height:30px;" maxlength="20" value=<?php echo $rec['name']; ?>><br />
+		<input name="name" type="text" style="width:100px;height:30px;" maxlength="20"><br />
 		出身
 		<select name="area_table_id">
 			<?php
